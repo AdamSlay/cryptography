@@ -14,6 +14,7 @@ The keyword is used as the beginning of the diagram, filling as many spaces
 as necessary, then the remaining letters of the alphabet make up the rest of the
 diagram. Here is an example diagram using the keyword 'PLAYFAIR'.
 
+1 | 2 | 3 | 4 | 5 
 --- | --- | --- | --- | ---
 P | L | A | Y | F
 I | R | B | C | D
