@@ -68,24 +68,55 @@ def playfair(strng, key, encode=True):
         pair.append('X')
         plain_text.append(pair)
 
-
     # -----Encode-----
-    if encode:
-        encoded = []
-        for pair in plain_text:
-            coord_a = []
-            coord_b = []
-            for row in diagram:
-                if pair[0] in row:
-                    coord_a.append(diagram.index(row))
-                    coord_a.append(diagram[diagram.index(row)].index(pair[0]))
-                if pair[1] in row:
-                    coord_b.append(diagram.index(row))
-                    coord_b.append(diagram[diagram.index(row)].index(pair[1]))
-            return coord_a, coord_b
+    encoded = []
+    for pair in plain_text:
+        coord_a = []
+        coord_b = []
+        for row in diagram:
+            if pair[0] in row:
+                coord_a.append(diagram.index(row))
+                coord_a.append(diagram[diagram.index(row)].index(pair[0]))
+            if pair[1] in row:
+                coord_b.append(diagram.index(row))
+                coord_b.append(diagram[diagram.index(row)].index(pair[1]))
+        # Rule 1: If they are on same row, add/sub 1 from row
+        if coord_a[0] == coord_b[0]:
+            if encode:
+                encoded.append(diagram[coord_a[0]][(coord_a[1] + 1) % 5])
+                encoded.append(diagram[coord_b[0]][(coord_b[1] + 1) % 5])
+            else:
+                # is the col index 0?
+                if coord_a[1] == 0:
+                    encoded.append(diagram[coord_a[0]][4])
+                else:
+                    encoded.append(diagram[coord_a[0]][coord_a[1] - 1])
+                if coord_b[1] == 0:
+                    encoded.append(diagram[coord_b[0]][4])
+                else:
+                    encoded.append(diagram[coord_b[0]][coord_b[1] - 1])
+        # Rule 2: If they are on the same col, add/sub 1 from col
+        elif coord_a[1] == coord_b[1]:
+            if encode:
+                encoded.append(diagram[(coord_a[0] + 1) % 5][coord_a[1]])
+                encoded.append(diagram[(coord_b[0] + 1) % 5][coord_b[1]])
+            else:
+                # is the row index 0?
+                if coord_a[0] == 0:
+                    encoded.append(diagram[coord_a[4]][coord_a[1]])
+                else:
+                    encoded.append(diagram[coord_a[0] - 1][coord_a[1]])
+                if coord_b[0] == 0:
+                    encoded.append(diagram[coord_b[4]][coord_b[1]])
+                else:
+                    encoded.append(diagram[coord_b[0] - 1][coord_b[1]])
+        # Rule 3: Make square and grab opposite corner on same row
+        else:
+            encoded.append(diagram[coord_a[0]][coord_b[1]])
+            encoded.append(diagram[coord_b[0]][coord_a[1]])
 
+    return ''.join(encoded)
 
-
-
-print(playfair('hello', 'quiet'))
+# Test
+#print(playfair('QKSUSULUCBSO', 'quiet', False))
 
